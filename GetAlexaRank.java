@@ -15,25 +15,42 @@ public class GetAlexaRank {
     private static ArrayList<String> listUrl = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("------------");
+        System.out.println("This small program will help you to get Alexa rank for a given list of ulr(s).\nPlease see the instruction at: https://github.com/scorta/GetAlexaRank");
+        System.out.println("------------");
         String fileName = "input.txt";
         StringBuilder result = new StringBuilder();
         int pauseInterval = 2000;
-        if(args.length > 0){
+        if (args.length > 0) {
             fileName = args[0];
         }
 
-        if(args.length > 1){
-            pauseInterval = Integer.parseInt(args[1]);
+        if (args.length > 1) {
+            try {
+                pauseInterval = Integer.parseInt(args[1]);
+            } catch (Exception e){
+                System.out.println("Invalid argument. Please check again.");
+                forceExit();
+            }
         }
 
         readUrlList(fileName);
         System.out.println("Start getting Alexa rank for the list...");
-        for(String url : listUrl){
-            result.append(getRank(url) + "\n");
+        for (String url : listUrl) {
+            result.append(getRank(url));
+            result.append("\n");
             Thread.sleep(pauseInterval);
         }
 
         writeOutput(fileName, result.toString());
+    }
+
+    private static void forceExit(){
+        System.out.println("------------");
+        System.out.println("The program will now exit.");
+        System.out.println("------------");
+        System.exit(1);
+
     }
 
     private static void writeOutput(String fileName, String content){
@@ -44,6 +61,7 @@ public class GetAlexaRank {
             System.out.println("Done. Please check the output file. It is named " + fileName + "_out.txt");
         } catch (Exception e){
             System.out.println("Error while writing result: " + e.toString());
+            forceExit();
         }
     }
 
@@ -56,6 +74,7 @@ public class GetAlexaRank {
             System.out.println("Done importing.");
         } catch (Exception e){
             System.out.println("Error while reading file: " + e.toString());
+            forceExit();
         }
     }
 
